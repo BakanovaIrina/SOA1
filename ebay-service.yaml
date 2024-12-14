@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: Ebay service
+  description: RESTful API for Ebay.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/api/v1'
+    description: Ebay server
+paths:
+  /ebay/filter/manufacturer/{manufacturer-id}:
+    get:
+      summary: Filter products by manufacturer (owner) id
+      description: Returns list of products with current manufacturer (owner) id
+      parameters:
+        - name: manufacturer-id
+          in: path
+          description: ID of the manufacturer
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: List of products from the specified manufacturer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './product-service.yaml#/components/schemas/Product'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 400
+                  message:
+                    type: string
+                    example: Id is under 0!
+                  time:
+                    type: string
+                    format: date-time
+                    example: 2022-09-19T00:00:09Z
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  time:
+                    type: string
+                    format: date-time
+                    example: 2022-09-19T00:00:09Z
+        default:
+          description: Returns message, error code and time in case of error
+          content:
+            application/json:
+              schema:
+                $ref: './product-service.yaml#/components/schemas/Error'
+  /ebay/filter/unit-of-measure/{unit-of-measure}:
+    get:
+      summary: Find list of products with current unitOfMeasure
+      description: Returns list of products with current unitOfMeasure
+      parameters:
+        - name: unit-of-measure
+          in: path
+          description: Unit of measure
+          required: true
+          schema:
+            $ref: './product-service.yaml#/components/schemas/UnitOfMeasure'
+      responses:
+        '200':
+          description: Returns list of products with the specified unit of measure
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './product-service.yaml#/components/schemas/Product'
+        '400':
+            description: Invalid query parameter
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            code:
+                                type: integer
+                                format: int32
+                                example: 400
+                            message:
+                                type: string
+                                example: Invalid query param value
+                            time:
+                                type: string
+                                format: date-time
+                                example: 2022-09-19T00:00:09Z
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal server error
+                  time:
+                    type: string
+                    format: date-time
+                    example: 2022-09-19T00:00:09Z
+        default:
+          description: Returns message, error code and time in case of error
+          content:
+            application/json:
+              schema:
+                $ref: './product-service.yaml#/components/schemas/Error'
